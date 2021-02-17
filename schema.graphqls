@@ -1,0 +1,62 @@
+schema {
+  query: Query
+}
+
+type Query {
+  getCustomer(id:Int): Customer
+  transaction: Transaction
+  allCustomer(customerInput:CustomerInput):Customer
+}
+
+
+type Mutation {
+	createCustomer(customerInput : String): String
+}
+
+type Customer @key(fields: "id") {
+  id: Int!
+  name: String
+  address: String
+  phone: String
+  receiver: Receiver
+  creditCard: CreditCard @provides(fields: "id")
+  #show: Show @provides(fields: "id")
+}
+
+type Receiver{
+  name: String
+  address: String
+}
+
+#type Show @key(fields: "id") @extends{
+#	id:Int! @external
+    #title: String
+    #releaseYear: Int
+#}
+
+type Transaction @key(fields: "id"){
+	id:Int!
+	transactionDate: String
+	status: String
+}
+
+type CreditCard @key(fields: "id") @extends {
+  id: Int! @external
+  #name: String @external
+  #address: String @external
+  #cardNumber: String @external
+  #expiryDate: String @external
+  #cvv: String @external
+}
+
+input CustomerInput{
+	id:Int!
+	name:String
+	address:String
+	phone:String
+	receiverInput:ReceiverInput
+}
+input ReceiverInput{
+  name: String
+  address: String
+}
